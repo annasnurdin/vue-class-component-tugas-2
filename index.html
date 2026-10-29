@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - SITTA UT</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <a href="index.html">SITTA UT</a>
+      </div>
+
+      <ul class="navbar-menu">
+        <li><a href="index.html" class="active">Dashboard</a></li>
+        <li><a href="stok.html">Informasi Bahan Ajar</a></li>
+        <li><a href="tracking.html">Tracking Pengiriman</a></li>
+        <li class="dropdown">
+          <a href="#">Laporan &#9662;</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Monitoring Progress DO Bahan Ajar</a></li>
+            <li><a href="#">Rekap Bahan Ajar</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Histori Transaksi Bahan Ajar</a></li>
+      </ul>
+
+      <div class="navbar-user">
+        <button type="button" class="btn-logout" onclick="alert('Logout berhasil!')">Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container" id="app">
+    <section class="card">
+      <h2 style="margin: 0 0 8px 0; color: #004080;">Selamat Datang, Admin SITTA!</h2>
+      <p style="margin: 0; color: #555; font-size: 14px;">Sistem Informasi Pengelolaan Bahan Ajar (SITTA) Universitas Terbuka</p>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      
+      <section class="card" style="margin-bottom: 0;">
+        <h3 style="margin-top: 0; margin-bottom: 10px; color: #004080;">Informasi Stok Bahan Ajar</h3>
+        <p style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.4;">
+          Kelola stok bahan ajar, filter berdasarkan UPBJJ daerah dan kategori, serta pantau status stok menipis dan kosong.
+        </p>
+        <a href="stok.html" class="btn">Buka Informasi Stok &rarr;</a>
+      </section>
+
+      <section class="card" style="margin-bottom: 0;">
+        <h3 style="margin-top: 0; margin-bottom: 10px; color: #004080;">Tracking Pengiriman (DO)</h3>
+        <p style="color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.4;">
+          Lacak status perjalanan pengiriman delivery order (DO) bahan ajar dan input pengiriman DO baru untuk mahasiswa.
+        </p>
+        <a href="tracking.html" class="btn">Buka Tracking Pengiriman &rarr;</a>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    new Vue({ el: '#app' });
+  </script>
+</body>
+</html>

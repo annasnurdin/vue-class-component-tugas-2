@@ -1,0 +1,146 @@
+Halo rekan-rekan mahasiswa, bagaimana kabar kalian? Semoga rekan-rekan mahasiswa dalam
+keadaan baik. Nah, kali ini ada Tugas Praktik 2 untuk mengimplementasikan apa saja yang
+sudah rekan-rekan mahasiswa pelajari mengenai Vue.js.
+Secara garis besar, tujuan dari tugas praktikum ini adalah:
+Mahasiswa mampu mengimplementasikan konsep sistem perorganisasian kode Javascript
+Framework Vue.js untuk membangun antarmuka dan alur interaktif dari aplikasi pemesanan
+bahan ajar SITTA untuk sistem kebutuhan proses pemesanan dan distribusi bahan ajar di UT.
+Pertama, Tugas Praktik 2 ini memiliki lima Indikator Capaian untuk menilai Hasil Belajar
+Mahasiswa, yaitu:
+1. Mahasiswa dapat menerapkan sistem perorganisasian kode Javascript Framework
+Vue.js yang disepakati pada umumnya.
+2. Mahasiswa dapat menerapkan fungsi untuk menampilkan data (mustaches/directive v-
+text/directive v-text) untuk menghasilkan output yang diharapkan.
+3. Mahasiswa dapat menerapkan fungsi conditional atau pengandaian (directive v-
+if/directive v-else/directive v-else-if/directive v-show) dengan menerapkan operator
+condition yang sesuai untuk menghasilkan output yang diharapkan.
+4. Mahasiswa mampu menerapkan data binding (one-way data binding/two-way data
+binding) melalui jenis directive data binding (v-bind,v-model) dan penggunaan
+property untuk mengolah data (computed property/methods property) yang sesuai
+untuk menghasilkan output yang diharapkan
+5. Mahasiswa mampu mengerapkan fungsi watcher yang sesuai untuk menghasilkan
+output yang diharapkan
+Soal Tugas
+Anda diminta untuk membuat sebuah aplikasi website sederhana untuk pemesanan Bahan Ajar
+di Universitas Terbuka. Pada Tugas Praktik Kedua ini, mahasiswa berfokus untuk membuat
+aplikasi website berbasis Vue.js sebagai framework yang digunakan sepanjang pengerjaan
+Tugas Praktik 2. Sehingga, data-data yang dibutuhkan tidak dibaca melalui database, tapi
+melalui js file sebagai dummy data yang akan dilampirkan bersamaan dengan Tugas Praktik
+ini.
+Buatlah Dua Halaman Website yang perlu dikembangkan sebagai berikut:
+1. Halaman Stok Bahan Ajar
+•
+Halaman ini menampilkan daftar stok bahan ajar untuk seluruh UT daerah (silakan
+bebas menggunakan table/list/bentuk lain yang menampilkan list data dalam jumlah
+banyak dan memiliki data-data field). Teman-teman mahasiswa perlu menampilkan
+daftar stok bahan ajar yang terdiri dari kolom data field sebagai berikut
+o Kode Mata Kuliah/Nama Mata Kuliah → kode, judulo Kategori Mata Kuliah → Kategori
+o UT-Daerah → upbjj
+o Lokasi Rak → lokasiRak
+•
+•
+•
+•
+o Jumlah Stok Bahan Ajar → qty
+o Jumlah Stok Safety Bahan Ajar → safety
+o Status
+o Catatan → catatanHTML
+Terdapat Fitur untuk mengedit stok data bahan ajar
+Terdapat fitur untuk melakukan filter dan sort data stock (silakan bebas menggunakan
+elemen select/radio/checkbox)
+o Terdapat filter stok berdasarkan:
+▪ ‘UT-Daerah’: terdiri pilihan dari seluruh UT-daerah, dan daftar setiap
+UT-daerah (upbjjList)
+▪ ‘Kategori Mata Kuliah’ (upbjjList)
+o Terdapat filter yang hanya menampilkan jumlah stock (qty) < dari jumlah
+safety stock (safety) dan jumlah stock = 0 untuk menjadi daftar yang dapat
+mengingatkan untuk melakukan re-order bahan ajar.
+o Terdapat fitur sort yang mengurutkan berdasarkan judul, stock, dan harga
+o Fitur filter dapat di-set ulang (reset)
+o Terapkan fitur di vue.js di mana di semua filter tidak perlu recompute kembali.
+o Implementasikan dependent options seperti misalkan ketika memilih filter
+stok berdasarkan ‘UT-daerah’, baru akan memunculkan filter untuk ‘Kategori
+Mata Kuliah’
+Menampilkan status dari stok bahan ajar
+o Memberikan status ‘Aman dengan menggunakan simbol yang memberikan
+tanda yang memberikan kesan ‘aman’ ataupun teks berwarna hijau apabila
+stok >= safety stock
+o Memberikan status ‘Menipis’ dengan menggunakan simbol yang memberikan
+kesan adanya ‘warning’ ataupun teks berwarna orange apabila stok < safety
+stock.
+o Memberikan status ‘Kosong’ dengan menggunakan simbol yang memberikan
+kesan adanya ‘bahaya’ ataupun teks berwarna merah apabila stok = 0
+Terdapat Fitur untuk menambahkan data bahan ajar baru melalui formulir kecil dan
+melakukan validasi sederhana untuk setiap data field.
+2. Tracking Delivery Order (DO)
+•
+•
+Halaman ini menampilkan halaman untuk tracking status pengiriman DO bahan ajar
+seperti pada Tugas Praktik 1, tetapi di sini perlu menerapkan penggunaan framework
+Vue.js.
+Terdapat fitur untuk menambahkan input delivery order yang baru. Berikut adalah data
+field yang perlu diisi
+o Nomor DO, di mana tergenerate otomatis. Penomorannya terdiri dari:
+▪ DO▪
+▪
+Tahun Berjalan
+Sequence Number
+Misal:
+DO2025-001 untuk data awal
+Selanjutnya jika sudah ada data tracking terbaru, menjadi DO2025-002 dst.
+o NIM, diisi secara manual oleh pengguna
+o Nama, diisi secara manual oleh pengguna
+o Ekspedisi (JNE Regular/JNE Express), dipilih oleh pengguna berdasarkan data
+pada upbjjList
+o Paket Bahan Ajar, dipilih oleh pengguna berdasarkan data pada paket
+▪ Gunakan elemen <select> dan menampilkan di halaman web informasi
+kode paket dan nama paket
+▪ Setelah memilih paket, akan muncul detail isi paket bahan ajar tersebut
+di bawah elemen <select> untuk memberikan informasi
+o Tanggal Kirim, dapat diisi manual ataupun menggunakan fungsi Date untuk
+mengambil local time.
+o Total Harga, diambil dari data pada Array of Objects paket → harga
+Struktur proyek Vue.js pada Tugas Praktik ini yang disarankan adalah sebagai berikut:
+/tugas2-vue-ut/
+├─ index.html← Menampilkan navigasi menu ke 2 halaman web lain: stok.html dan
+tracking.html
+├─ stok.html← Halaman 1: Stok Bahan Ajar (WAJIB)
+├─ tracking.html← Halaman 2: Tracking DO (WAJIB)
+├─ css/
+│ └─ style.css
+← CSS ringan (opsional)
+└─ js/
+├─ stok-app.js← logika Vue utk stok.html
+└─ tracking-app.js← logika Vue utk tracking.html
+Untuk memudahkan teman-teman mahasiswa dalam pengerjaan Tugas Praktik 2, lampiran file
+dummy data (file dataBahanAjar.js) yang dilampirkan bersamaan dengan file ini, menjadi
+template atau acuan yang yang dapat digunakan pada masing-masing file stok-app.js dan
+tracking-app.jsPetunjuk Pengerjaan dan Poin untuk Video Penjelasan Tugas Praktik 2
+1. Kriteria penilaian dalam tugas ini adalah bagaimana teman-teman mengimplementasikan:
+1.1. Arsitektur dan Struktur Proyek Vue.js: struktur folder, struktur penamaan file, struktur
+komponen, pemisahan file yang disusun dengan rapih dan mudah diapahami (5 Poin)
+1.2. Penggunaan Data Binding & Directive untuk dan List Rendering: penggunaan fungsi
+menampilkan data (mustaches, v-text, v-html) dan fungsi data binding (v-bind, v-
+model) yang tepat dan sesuai dengan output yang diharapkan untuk membuat daftar
+(20 Poin)
+1.3. Penggunaan Conditional: fungsi conditional (v-if, v-else, v-else-if, v-show) yang
+efektif dan sesuai dengan output yang diharapkan (10 Poin)
+1.4. Penggunaan Property (Computed ataupun Methods): menerapkan dengan sesuai (10
+Poin)
+1.5. Watchers: minimal menggunakan 2 watcher untuk memantau perubahan data (10
+Poin)
+1.6. Formulir input dan Validasi input sederhana: menampilkan element-element yang
+berinteraksi dengan pengguna atau yang perlu diisi pengguna yang tepat, sesuai, dan
+memudahkan pengguna (20 Poin)
+1.7. Kreativitas dalam menampilkan interface yang mudah bagi pengguna dan memberikan
+pengalaman penggunaan yang nyaman (10 Poin)
+1.8. Penjelasan dalam video untuk menyelesaikan tugas dengan sistematika dan alur
+berpikir yang dapat menjelaskan penerapan fungsi-fungsi (beserta argumentasi
+pendukung) yang digunakan dalam merancang dan membuat aplikasi website
+menggunakan Vue.js (15 Poin)
+2. Pada pengerjaan Tugas Praktik 2 ini, tidak perlu menggunakan Template Component
+pada Vue.js. Cukup seperti yang sudah dipelajari sampai sejauh ini dan diikuti seperti pada
+struktur proyek Vue.js yang telah kita sepakati pada Tugas Praktik 2 ini.
+3. Durasi video penjelasan maksimal 15 menit
+Setelah menyelesaikan Tugas Praktik 2, rekan-rekan dapat mengirimkan file source code dan
+link rekaman video penjelasan pengerjaan Tugas Praktik 2.

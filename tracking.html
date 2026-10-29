@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking Pengiriman - SITTA UT</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <a href="index.html">SITTA UT</a>
+      </div>
+
+      <ul class="navbar-menu">
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="stok.html">Informasi Bahan Ajar</a></li>
+        <li><a href="tracking.html" class="active">Tracking Pengiriman</a></li>
+        <li class="dropdown">
+          <a href="#">Laporan &#9662;</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Monitoring Progress DO Bahan Ajar</a></li>
+            <li><a href="#">Rekap Bahan Ajar</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Histori Transaksi Bahan Ajar</a></li>
+      </ul>
+
+      <div class="navbar-user">
+        <button type="button" class="btn-logout" onclick="alert('Logout berhasil!')">Logout</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container" id="app">
+
+    <section class="card">
+      <h3 style="margin-top: 0; margin-bottom: 15px; color: #004080;">Input Delivery Order (DO) Baru</h3>
+
+      <form @submit.prevent="simpanDO">
+        <div class="form-stok-grid">
+          <div class="form-group">
+            <label for="nomorDO">Nomor DO (Otomatis)</label>
+            <input type="text" id="nomorDO" :value="nomorDOBaru" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="nim">NIM Mahasiswa</label>
+            <input type="text" id="nim" v-model.trim="formDO.nim" placeholder="Masukkan NIM">
+            <span v-if="errors.nim" class="form-error">{{ errors.nim }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="nama">Nama Mahasiswa</label>
+            <input type="text" id="nama" v-model.trim="formDO.nama" placeholder="Nama mahasiswa">
+            <span v-if="errors.nama" class="form-error">{{ errors.nama }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="ekspedisi">Jasa Ekspedisi</label>
+            <select id="ekspedisi" v-model="formDO.ekspedisi">
+              <option value="" disabled>-- Pilih Ekspedisi --</option>
+              <option v-for="e in pengirimanList" :key="e.kode" :value="e.nama">{{ e.nama }}</option>
+            </select>
+            <span v-if="errors.ekspedisi" class="form-error">{{ errors.ekspedisi }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="paketKode">Paket Bahan Ajar</label>
+            <select id="paketKode" v-model="formDO.paketKode">
+              <option value="" disabled>-- Pilih Paket Bahan Ajar --</option>
+              <option v-for="p in paket" :key="p.kode" :value="p.kode">
+                {{ p.kode }} - {{ p.nama }}
+              </option>
+            </select>
+            <span v-if="errors.paketKode" class="form-error">{{ errors.paketKode }}</span>
+
+            <div v-show="selectedPaket" class="detail-paket-box">
+              <strong>Isi Paket:</strong>
+              <div v-if="selectedPaket" style="margin-top: 4px;">
+                <span v-for="buku in selectedPaket.isi" :key="buku" class="badge-item">{{ buku }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tanggalKirim">Tanggal Kirim</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="date" id="tanggalKirim" v-model="formDO.tanggalKirim">
+              <button type="button" class="btn-secondary" style="white-space: nowrap; padding: 6px 12px; font-size: 13px;" @click="setTanggalHariIni">Hari Ini</button>
+            </div>
+            <span v-if="errors.tanggalKirim" class="form-error">{{ errors.tanggalKirim }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="total">Total Pembayaran (Otomatis)</label>
+            <input type="text" id="total" :value="formatRupiah(formDO.total)" readonly style="font-weight: bold; color: #004080;">
+          </div>
+        </div>
+
+        <div>
+          <button type="submit">Simpan &amp; Terbitkan DO</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h3 style="margin-top: 0; margin-bottom: 15px; color: #004080;">Tracking Pengiriman Bahan Ajar</h3>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input type="text" v-model.trim="inputSearchDO" @keyup.enter="cariDO" placeholder="Masukkan Nomor Delivery Order" style="flex: 1; padding: 9px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+        <button type="button" @click="cariDO" style="padding: 9px 18px; font-size: 14px; white-space: nowrap;">Cari DO</button>
+      </div>
+
+      <div v-if="hasilTracking" style="border-top: 1px solid #eee; padding-top: 15px;">
+        <table class="table-detail">
+          <tr>
+            <th>Nomor DO</th>
+            <td><strong>{{ hasilTracking.nomorDO }}</strong></td>
+          </tr>
+          <tr>
+            <th>NIM Mahasiswa</th>
+            <td>{{ hasilTracking.nim }}</td>
+          </tr>
+          <tr>
+            <th>Nama Mahasiswa</th>
+            <td>{{ hasilTracking.nama }}</td>
+          </tr>
+          <tr>
+            <th>Status Pengiriman</th>
+            <td>
+              <span :class="['status-badge', hasilTracking.status === 'Selesai Antar' ? 'status-aman' : 'status-menipis']">
+                {{ hasilTracking.status }}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>Ekspedisi</th>
+            <td>{{ hasilTracking.ekspedisi }}</td>
+          </tr>
+          <tr>
+            <th>Tanggal Kirim</th>
+            <td>{{ hasilTracking.tanggalKirim }}</td>
+          </tr>
+          <tr>
+            <th>Jenis Paket</th>
+            <td>{{ hasilTracking.namaPaket }}</td>
+          </tr>
+          <tr>
+            <th>Total Pembayaran</th>
+            <td><strong>{{ formatRupiah(hasilTracking.total) }}</strong></td>
+          </tr>
+        </table>
+
+        <h4 style="margin: 20px 0 10px; font-size: 15px; color: #004080;">Riwayat Perjalanan Pengiriman</h4>
+        <table class="table-riwayat">
+          <thead>
+            <tr>
+              <th style="width: 180px;">Waktu</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(p, i) in hasilTracking.perjalanan" :key="i">
+              <td>{{ p.waktu }}</td>
+              <td>{{ p.keterangan }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-else-if="searchDO.trim()" class="alert-danger">
+        Nomor Delivery Order <strong>{{ searchDO }}</strong> tidak ditemukan. Silakan periksa kembali nomor DO yang dimasukkan.
+      </div>
+      
+      <div v-else class="alert-info" style="margin-top: 15px;">
+        Silakan masukkan Nomor Delivery Order pada kolom di atas untuk melacak pengiriman.
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="js/tracking-app.js"></script>
+</body>
+</html>
